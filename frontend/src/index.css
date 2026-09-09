@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Cyberminimalism: pure grayscale, no hue anywhere — anchored to
+     #000000 / #0A0A0A / #141414 / #383838 / #F0F0F0. RGB triplets so
+     Tailwind's `/opacity` modifiers work, e.g. `bg-surface/50`. */
+  --page: 10 10 10;
+  --surface: 20 20 20;
+  --fg: 240 240 240;
+  /* The whole app is dark now — no light theme left anywhere. Without this,
+     browsers that auto-theme unstyled bits of a page (native form controls,
+     and inconsistently, portaled content like modals that render straight
+     into <body>) guess based on OS theme and can invert some elements but
+     not others, which is exactly the white-modal-with-dark-inputs bug this
+     fixes. */
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-page text-ink antialiased;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid rgb(var(--fg));
+  outline-offset: 2px;
+}
+
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(4%, -6%) scale(1.08); }
+  66% { transform: translate(-3%, 4%) scale(0.96); }
+}
+.animate-drift {
+  animation: drift 18s ease-in-out infinite;
+}
