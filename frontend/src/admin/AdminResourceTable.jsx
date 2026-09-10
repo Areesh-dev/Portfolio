@@ -156,49 +156,51 @@ export default function AdminResourceTable({ title, api, columns, fields, ordera
         </div>
       )}
 
+
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} title={editing ? `Edit ${title}` : `Add ${title}`} wide>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {fields.map((f) => {
-            const value = form[f.name];
-            if (f.type === 'textarea') {
-              return <Textarea key={f.name} label={f.label} value={value || ''} onChange={(e) => handleChange(f.name, e.target.value)} />;
-            }
-            if (f.type === 'select') {
+        <form onSubmit={handleSubmit}>
+          {/* Scrollable body */}
+          <div className="max-h-[55vh] overflow-y-auto pr-2 -mr-2 space-y-4">
+            {fields.map((f) => {
+              const value = form[f.name];
+              if (f.type === 'textarea') {
+                return <Textarea key={f.name} label={f.label} value={value || ''} onChange={(e) => handleChange(f.name, e.target.value)} />;
+              }
+              if (f.type === 'select') {
+                return (
+                  <Select key={f.name} label={f.label} value={value || ''} onChange={(e) => handleChange(f.name, e.target.value)} required={f.required}>
+                    <option value="" disabled>Select…</option>
+                    {f.options.map((opt) => (
+                      <option key={opt} value={opt}>{opt}</option>
+                    ))}
+                  </Select>
+                );
+              }
+              if (f.type === 'checkbox') {
+                return <Checkbox key={f.name} label={f.label} checked={!!value} onChange={(e) => handleChange(f.name, e.target.checked)} />;
+              }
+              if (f.type === 'tags') {
+                return <TagInput key={f.name} label={f.label} value={value || []} onChange={(v) => handleChange(f.name, v)} />;
+              }
+              if (f.type === 'image') {
+                return <ImageUploader key={f.name} label={f.label} bucket={f.bucket} value={value} onChange={(url) => handleChange(f.name, url)} />;
+              }
               return (
-                <Select key={f.name} label={f.label} value={value || ''} onChange={(e) => handleChange(f.name, e.target.value)} required={f.required}>
-                  <option value="" disabled>
-                    Select…
-                  </option>
-                  {f.options.map((opt) => (
-                    <option key={opt} value={opt}>
-                      {opt}
-                    </option>
-                  ))}
-                </Select>
+                <Input
+                  key={f.name}
+                  label={f.label}
+                  type={f.type || 'text'}
+                  value={value ?? ''}
+                  onChange={(e) => handleChange(f.name, e.target.value)}
+                  required={f.required}
+                />
               );
-            }
-            if (f.type === 'checkbox') {
-              return <Checkbox key={f.name} label={f.label} checked={!!value} onChange={(e) => handleChange(f.name, e.target.checked)} />;
-            }
-            if (f.type === 'tags') {
-              return <TagInput key={f.name} label={f.label} value={value || []} onChange={(v) => handleChange(f.name, v)} />;
-            }
-            if (f.type === 'image') {
-              return <ImageUploader key={f.name} label={f.label} bucket={f.bucket} value={value} onChange={(url) => handleChange(f.name, url)} />;
-            }
-            return (
-              <Input
-                key={f.name}
-                label={f.label}
-                type={f.type || 'text'}
-                value={value ?? ''}
-                onChange={(e) => handleChange(f.name, e.target.value)}
-                required={f.required}
-              />
-            );
-          })}
-          {formError && <p className="text-sm text-red-400">{formError}</p>}
-          <div className="flex justify-end gap-3 pt-2">
+            })}
+            {formError && <p className="text-sm text-red-400">{formError}</p>}
+          </div>
+
+          {/* Fixed footer buttons */}
+          <div className="flex justify-end gap-3 pt-4 mt-4 border-t border-ink/10">
             <Button type="button" variant="ghost" onClick={() => setModalOpen(false)}>
               Cancel
             </Button>
