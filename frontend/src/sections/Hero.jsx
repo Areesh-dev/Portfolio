@@ -43,7 +43,7 @@ export default function Hero() {
             loop
             playsInline
           />
-          <div className="absolute inset-0 -z-10 bg-primary-900/10 bg-gradient-to-b from-page/100 via-page/100 to-page opacity-50" />
+          <div className="absolute inset-0 -z-10 bg-primary-900/10 bg-gradient-to-b from-page/100 via-page/100 to-page opacity-70" />
         </>
       ) : (
         <div className="pointer-events-none absolute inset-x-0 -top-32 -z-10 flex justify-center blur-3xl">
@@ -56,10 +56,12 @@ export default function Hero() {
           <span className="mb-5 inline-block rounded-full border border-primary-400/30 bg-primary-500/10 px-4 py-1.5 text-sm font-semibold text-primary-300">
             {content?.site_tagline || 'Available for new projects'}
           </span>
-          <h1 className="text-6xl font-rowdies font-bold leading-[1.1] tracking-tight text-ink sm:text-3xl lg:text-6xl">
-            {content?.hero_heading || "Hi, I'm a"}{' '}
-            <span className="text-primary-400 font-rowdies">{content?.hero_subheading || 'Full-Stack Developer'}</span>
-          </h1>
+          <h1 className="text-3xl font-rowdies font-bold leading-[1.1] tracking-tight text-ink sm:text-4xl md:text-5xl lg:text-6xl">
+  {content?.hero_heading || "Hi, I'm a"}{' '}
+  <span className="font-rowdies text-primary-400">
+    {content?.hero_subheading || 'Full-Stack Developer'}
+  </span>
+</h1>
           <p className="mt-6 max-w-xl text-lg text-ink/60">
             {content?.hero_intro ||
               'I design and build fast, reliable web applications from front to back — clean interfaces backed by solid engineering.'}
