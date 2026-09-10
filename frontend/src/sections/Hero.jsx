@@ -43,7 +43,7 @@ export default function Hero() {
             loop
             playsInline
           />
-          <div className="absolute inset-0 -z-10 bg-primary-900/10 bg-gradient-to-b from-page/100 via-page/100 to-page opacity-70" />
+          <div className="absolute inset-0 -z-10 bg-primary-900/10 bg-gradient-to-b from-page/100 via-page/100 to-page opacity-50" />
         </>
       ) : (
         <div className="pointer-events-none absolute inset-x-0 -top-32 -z-10 flex justify-center blur-3xl">
