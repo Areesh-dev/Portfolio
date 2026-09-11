@@ -56,7 +56,7 @@ export default function Hero() {
           <span className="mb-5 inline-block rounded-full border border-primary-400/30 bg-primary-500/10 px-4 py-1.5 text-sm font-semibold text-primary-300">
             {content?.site_tagline || 'Available for new projects'}
           </span>
-          <h1 className="text-5xl font-rowdies font-bold leading-[1.1] tracking-tight text-ink sm:text-3xl md:text-5xl lg:text-6xl">
+          <h1 className="text-4xl font-rowdies font-bold leading-[1.1] tracking-tight text-ink sm:text-3xl md:text-5xl lg:text-6xl">
   {content?.hero_heading || "Hi, I'm a"}{' '}
   <span className="font-rowdies text-primary-400">
     {content?.hero_subheading || 'Full-Stack Developer'}
