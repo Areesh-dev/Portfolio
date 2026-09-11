@@ -119,44 +119,20 @@ export default function ResumeView() {
         )}
 
         {/* Mobile/Tablet — Preview card */}
-        {!loading && resumeUrl && isMobile && (
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03] px-6 py-14 text-center">
-            <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-500/10">
-              <FileText className="h-8 w-8 text-primary-400" />
-            </div>
+{!loading && resumeUrl && isMobile && (
+  <div className="flex flex-col items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03] px-6 py-14 text-center">
+    <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-500/10">
+      <FileText className="h-8 w-8 text-primary-400" />
+    </div>
 
-            <h2 className="text-lg font-semibold text-ink">
-              Resume PDF
-            </h2>
-            <p className="mt-2 max-w-sm text-sm text-ink/60">
-              Mobile browsers mein PDF preview support nahi karte. Neeche se
-              open ya download karo.
-            </p>
-
-            <div className="mt-6 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
-              <Button
-                as="a"
-                href={resumeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <ExternalLink className="h-4 w-4" />
-                Open PDF
-              </Button>
-              <Button
-                as="a"
-                href={resumeUrl}
-                download
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="secondary"
-              >
-                <Download className="h-4 w-4" />
-                Download
-              </Button>
-            </div>
-          </div>
-        )}
+    <h2 className="text-lg font-semibold text-ink">
+      Resume PDF
+    </h2>
+    <p className="mt-2 max-w-sm text-sm text-ink/60">
+      Mobile browsers don't support inline PDF previews. Use the buttons above to open or download the resume.
+    </p>
+  </div>
+)}
       </Container>
     </Layout>
   );
