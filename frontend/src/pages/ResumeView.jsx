@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Download, FileX, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Download, FileX, ExternalLink, FileText } from 'lucide-react';
 
 import Layout from '../components/Layout.jsx';
 import Container from '../components/Container.jsx';
@@ -9,15 +9,34 @@ import EmptyState from '../components/EmptyState.jsx';
 import { useSiteContent } from '../hooks/useSiteContent.jsx';
 import { setPageMeta } from '../utils/seo.js';
 
+// Simple hook — mobile/tablet detect karta hai
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => {
+      const ua = navigator.userAgent || '';
+      const isTouch = window.matchMedia('(pointer: coarse)').matches;
+      const isSmall = window.innerWidth < 1024;
+      const isMobileUA = /iPhone|iPad|iPod|Android|Mobile/i.test(ua);
+      setIsMobile(isMobileUA || (isTouch && isSmall));
+    };
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
+  return isMobile;
+}
+
 export default function ResumeView() {
   const { content, loading } = useSiteContent();
   const resumeUrl = content?.resume_file_url;
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     setPageMeta({
-      title: content?.site_title
-        ? `Resume — ${content.site_title}`
-        : 'Resume',
+      title: content?.site_title ? `Resume — ${content.site_title}` : 'Resume',
       description: 'View or download the full resume.',
     });
   }, [content]);
@@ -25,7 +44,6 @@ export default function ResumeView() {
   return (
     <Layout>
       <Container className="py-16">
-
         {/* Back */}
         <Link
           to="/"
@@ -41,7 +59,6 @@ export default function ResumeView() {
             <h1 className="text-3xl font-bold tracking-tight text-ink sm:text-4xl">
               Resume
             </h1>
-
             <p className="mt-2 text-sm text-ink/60">
               View my resume or download a PDF copy.
             </p>
@@ -49,8 +66,6 @@ export default function ResumeView() {
 
           {resumeUrl && (
             <div className="flex flex-wrap gap-3">
-
-              {/* Download */}
               <Button
                 as="a"
                 href={resumeUrl}
@@ -62,7 +77,6 @@ export default function ResumeView() {
                 Download PDF
               </Button>
 
-              {/* Open */}
               <Button
                 as="a"
                 href={resumeUrl}
@@ -73,7 +87,6 @@ export default function ResumeView() {
                 <ExternalLink className="h-4 w-4" />
                 Open PDF
               </Button>
-
             </div>
           )}
         </div>
@@ -81,9 +94,7 @@ export default function ResumeView() {
         {/* Loading */}
         {loading && (
           <div className="flex min-h-[500px] items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03]">
-            <p className="text-sm text-ink/60">
-              Loading resume...
-            </p>
+            <p className="text-sm text-ink/60">Loading resume...</p>
           </div>
         )}
 
@@ -96,19 +107,56 @@ export default function ResumeView() {
           />
         )}
 
-        {/* PDF */}
-        {!loading && resumeUrl && (
+        {/* Desktop — PDF embed */}
+        {!loading && resumeUrl && !isMobile && (
           <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
-
             <iframe
               title="Resume PDF"
               src={`${resumeUrl}#toolbar=1&navpanes=0&scrollbar=1`}
               className="block h-[85vh] w-full bg-white sm:h-[110vh] lg:h-[140vh]"
             />
-
           </div>
         )}
 
+        {/* Mobile/Tablet — Preview card */}
+        {!loading && resumeUrl && isMobile && (
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03] px-6 py-14 text-center">
+            <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-500/10">
+              <FileText className="h-8 w-8 text-primary-400" />
+            </div>
+
+            <h2 className="text-lg font-semibold text-ink">
+              Resume PDF
+            </h2>
+            <p className="mt-2 max-w-sm text-sm text-ink/60">
+              Mobile browsers mein PDF preview support nahi karte. Neeche se
+              open ya download karo.
+            </p>
+
+            <div className="mt-6 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+              <Button
+                as="a"
+                href={resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <ExternalLink className="h-4 w-4" />
+                Open PDF
+              </Button>
+              <Button
+                as="a"
+                href={resumeUrl}
+                download
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="secondary"
+              >
+                <Download className="h-4 w-4" />
+                Download
+              </Button>
+            </div>
+          </div>
+        )}
       </Container>
     </Layout>
   );
